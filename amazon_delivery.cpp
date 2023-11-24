@@ -1,31 +1,28 @@
-#include <iostream> 
-#include <algorithm> 
-#include <cmath> 
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 
-class Address{
+class Address {
 public:
+    int i, j;
+    std::string Last_possible_delivery_date;
 
-int i, j; 
+    // Constructor
+    Address(int i, int j, std::string Last_possible_delivery_date) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) {}
 
-std::string Last_possible_delivery_date;
-//constructor 
-address(int &i, int &j, std::string Last_possible_delivery_date) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date){}
-
-    // so do we do 2 methods and just choose the best? 
-    // implementing the straight line/manhattan method
-    double distance( const address& additional_addresses, bool manhattan_distance = true){
+    // Distance calculation method
+    double distance(const Address& additional_addresses, bool manhattan_distance = true) const {
         if (manhattan_distance) {
-            double manhattan_distance_value = abs(i - additional_addresses.i) + abs(j - additional_addresses.j);
-            return manhattan_distance_value;    
-        } else { 
-            // straight line approach
-            return sqrt(pow(i - additional_addresses.i,2) + pow(j - additional_addresses.j,2));
+            return std::abs(i - additional_addresses.i) + std::abs(j - additional_addresses.j);
+        } else {
+            return std::sqrt(std::pow(i - additional_addresses.i, 2) + std::pow(j - additional_addresses.j, 2));
         }
-        }
-    };
-    
+    }
+};
 
-   int main(){
+int main() {
+
+    // test code from chatgpt
     Address address1(1, 2, "2023-11-30");
     Address address2(3, 5, "2023-11-25");
 
@@ -36,7 +33,4 @@ address(int &i, int &j, std::string Last_possible_delivery_date) : i(i), j(j), L
     std::cout << "Straight-Line Distance: " << straight_line_distance << std::endl;
 
     return 0;
-
-   } 
-
-
+};
