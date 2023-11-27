@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 class Address {
 public:
@@ -8,7 +9,7 @@ public:
     std::string Last_possible_delivery_date;
 
     // Constructor
-    Address(int i, int j, std::string Last_possible_delivery_date) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) {}
+    Address(int i, int j, std::string Last_possible_delivery_date = "No_Date") : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) {}
 
     // manhattan_distance and straight line mehtod
     double distance(const Address& additional_addresses, bool manhattan_distance = true) const {
@@ -18,6 +19,18 @@ public:
             return std::sqrt(std::pow(i - additional_addresses.i, 2) + std::pow(j - additional_addresses.j, 2));
         }
     }
+};
+
+class AddressList{
+    private:
+        std::vector<Address> address_list;
+    public:
+        
+        void add_address(){};
+
+        double length(){};
+
+        Address index_closest_to(){};
 };
 
 int main() {
