@@ -69,7 +69,7 @@ class AddressList{
         }
 };
 
-class Route:AddressList {
+class Route: public AddressList {
     public:
         void add_address(Address address) override {
             // Ensure the address is not already in the list
