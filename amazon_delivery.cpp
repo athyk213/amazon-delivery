@@ -76,7 +76,7 @@ class AddressList{
             return closest_address;
         }
 
-        string get_address_list() const {
+        string as_string() const {
             std::stringstream ss;
 
             for (const auto& addr : address_list) {
@@ -85,6 +85,8 @@ class AddressList{
 
             return ss.str();
         }
+
+
 };
 
 class Route: public AddressList {
@@ -113,7 +115,7 @@ int main() {
     route.add_address(Address(3, 4, "2023-12-02"));
     route.add_address(Address(5, 6, "2023-12-02"));
 
-    cout << route.get_address_list();
+    cout << route.as_string();
 
     return 0;
 }
