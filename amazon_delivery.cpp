@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <sstream>
+using namespace std;
 
 class Address {
 private:
@@ -31,6 +33,12 @@ public:
     // check if addresses are equal
     bool operator==(const Address& other) const {
         return i == other.get_i() && j == other.get_j();
+    }
+
+    string get_address() const {
+        stringstream ss;
+        ss << "(" << i << ", " << j << ")";
+        return ss.str();
     }
 };
 
@@ -67,10 +75,25 @@ class AddressList{
 
             return closest_address;
         }
+
+        string get_address_list() const {
+            std::stringstream ss;
+
+            for (const auto& addr : address_list) {
+                ss << addr.get_address() << " ";
+            }
+
+            return ss.str();
+        }
 };
 
 class Route: public AddressList {
     public:
+        Route(){
+            address_list.push_back(Address(0,0));
+            address_list.push_back(Address(0,0));
+        }
+
         void add_address(Address address) override {
             // Ensure the address is not already in the list
             for (const auto& addr : address_list) {
@@ -79,47 +102,18 @@ class Route: public AddressList {
                 }
             }
 
-            // Ensure the depot is not affected
-            if (address_list.size() > 0) {
-                address_list.insert(address_list.begin() + address_list.size() - 1, address);
-            } else {
-                address_list.push_back(address); // Add the first element (depot)
-            }
+            // Keep first and last element the same
+            address_list.insert(address_list.begin() + address_list.size() - 1, address);
         }
 };
 
 int main() {
-    // Test Case 1: Add addresses to AddressList
-    AddressList addressList;
-    addressList.add_address(Address(1, 2, "2023-12-01"));
-    addressList.add_address(Address(3, 4, "2023-12-02"));
-
-    // Test Case 2: Calculate the total distance in AddressList
-    std::cout << "Total distance in AddressList: " << addressList.length() << std::endl;
-
-    // Test Case 3: Add addresses to Route
     Route route;
     route.add_address(Address(1, 2, "2023-12-01"));
     route.add_address(Address(3, 4, "2023-12-02"));
+    route.add_address(Address(5, 6, "2023-12-02"));
 
-    // Test Case 4: Calculate the total distance in Route
-    std::cout << "Total distance in Route: " << route.length() << std::endl;
-
-    // Test Case 5: Add duplicate address to AddressList
-    addressList.add_address(Address(1, 2, "2023-12-01")); // Adding a duplicate address
-
-    // Test Case 6: Add duplicate address to Route
-    route.add_address(Address(1, 2, "2023-12-01")); // Adding a duplicate address
-
-    // Test Case 7: Find the closest address in AddressList
-    Address targetAddress1(10, 10);
-    Address closestAddress1 = addressList.index_closest_to(targetAddress1);
-    std::cout << "Closest address in AddressList: (" << closestAddress1.get_i() << ", " << closestAddress1.get_j() << ")" << std::endl;
-
-    // Test Case 8: Find the closest address in Route
-    Address targetAddress2(10, 10);
-    Address closestAddress2 = route.index_closest_to(targetAddress2);
-    std::cout << "Closest address in Route: (" << closestAddress2.get_i() << ", " << closestAddress2.get_j() << ")" << std::endl;
+    cout << route.get_address_list();
 
     return 0;
 }
