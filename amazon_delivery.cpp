@@ -141,40 +141,55 @@ class Route: public AddressList {
                 current_address = next_address;
             }            
             return new_route;
-    }
+        }
+
+        void apply_2_opt() {
+            bool improvement = true;
+
+            while (improvement) {
+                improvement = false;
+
+                for (size_t i = 1; i < address_list.size() - 2; ++i) {
+                    for (size_t j = i + 1; j < address_list.size() - 1; ++j) {
+                        // Check if the new connection is shorter
+                        double delta_distance = address_list[i - 1].distance(address_list[j]) +
+                                                address_list[i].distance(address_list[j + 1]) -
+                                                address_list[i - 1].distance(address_list[i]) -
+                                                address_list[j].distance(address_list[j + 1]);
+
+                        if (delta_distance < 0) {
+                            // If the new connection is shorter, reverse the portion of the tour
+                            reverse(address_list.begin() + i, address_list.begin() + j + 1);
+                            improvement = true;
+                        }
+                    }
+                }
+            }
+        }
 };
 
 int main() {
+    // Create addresses
+    Address address1(1, 0, "2023-12-01");
+    Address address2(0, 1, "2023-12-02");
+    Address address3(1, 1, "2023-12-03");
+
+    // Create a Route
     Route route;
-    route.add_address(Address(1, 2, "2023-12-01"));
-    route.add_address(Address(3, 4, "2023-12-02"));
-    route.add_address(Address(5, 6, "2023-12-02"));
 
-    cout << route.as_string();
+    // Add addresses to the route
+    route.add_address(address1);
+    route.add_address(address2);
+    route.add_address(address3);
 
-    // Test case 1
-    Route route1;
-    route1.add_address(Address(5, 6, "2023-12-02"));
-    route1.add_address(Address(1, 2, "2023-12-01"));
-    route1.add_address(Address(3, 4, "2023-12-02"));
+    // Display the initial route
+    std::cout << "Initial Route: " << route.as_string() << std::endl;
 
+    // Apply the 2-opt heuristic
+    route.apply_2_opt();
 
-    cout << "Original Route 1: " << route1.as_string() << endl;
-
-    Route greedyRoute1 = route1.greedy_route();
-
-    cout << "Greedy Route 1: " << greedyRoute1.as_string() << endl;
-    cout << "Original Route 1 Length: " << route1.length() << endl;
-    cout << "Greedy Route 1 Length: " << greedyRoute1.length() << endl;
-
-    cout << "Text book test case \n";
-    Route deliveries; deliveries.add_address( Address(0,5));
-    deliveries.add_address( Address(5,0));
-    deliveries.add_address( Address(5,5));
-    cout << "Travel in order: " << deliveries.length() << '\n';; 
-    auto route2 = deliveries.greedy_route();  
-    auto len = route2.length(); 
-    cout << "Square route: " << route2.as_string() << "\n has length " << len << '\n';
+    // Display the optimized route
+    std::cout << "Optimized Route: " << route.as_string() << std::endl;
 
     return 0;
 }
