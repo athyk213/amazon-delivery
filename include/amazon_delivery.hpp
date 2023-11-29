@@ -168,28 +168,28 @@ class Route: public AddressList {
         }
 };
 
-int main() {
-    // Create addresses
-    Address address1(1, 0, "2023-12-01");
-    Address address2(0, 1, "2023-12-02");
-    Address address3(1, 1, "2023-12-03");
+// int main() {
+//     // Create addresses
+//     Address address1(1, 0, "2023-12-01");
+//     Address address2(0, 1, "2023-12-02");
+//     Address address3(1, 1, "2023-12-03");
 
-    // Create a Route
-    Route route;
+//     // Create a Route
+//     Route route;
 
-    // Add addresses to the route
-    route.add_address(address1);
-    route.add_address(address2);
-    route.add_address(address3);
+//     // Add addresses to the route
+//     route.add_address(address1);
+//     route.add_address(address2);
+//     route.add_address(address3);
 
-    // Display the initial route
-    std::cout << "Initial Route: " << route.as_string() << std::endl;
+//     // Display the initial route
+//     std::cout << "Initial Route: " << route.as_string() << std::endl;
 
-    // Apply the 2-opt heuristic
-    route.apply_2_opt();
+//     // Apply the 2-opt heuristic
+//     route.apply_2_opt();
 
-    // Display the optimized route
-    std::cout << "Optimized Route: " << route.as_string() << std::endl;
+//     // Display the optimized route
+//     std::cout << "Optimized Route: " << route.as_string() << std::endl;
 
-    return 0;
-}
+//     return 0;
+// }
