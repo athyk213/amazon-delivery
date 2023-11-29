@@ -108,17 +108,22 @@ class Route: public AddressList {
             address_list.insert(address_list.begin() + address_list.size() - 1, address);
         }
 
+        // construct a greedy route based on the next closest address
         Route greedy_route() {
+
+            // initialize a new route starting at the depot
             Route new_route;
             Address current_address = address_list[0];
-
+            
+            // remove the last stop (the depot)
             address_list.pop_back();
 
-            
-            //this goes to the closest then erases the index after
+            // continue until all addresses are visited
+            // At the end address list will only contain the next address, which is added to new_route
             while (address_list.size() > 1) {
 
-
+                // remove current_address from address_list
+                // TODO find a cleaner way to do this
                 for (int i = 0; i < address_list.size(); i++){
                     if (address_list[i] == current_address){
                         address_list.erase(address_list.begin()+i);
@@ -126,10 +131,13 @@ class Route: public AddressList {
                     }
                 }
 
+                // the next address in the route is the address closest to current
                 Address next_address = index_closest_to(current_address);
                 new_route.add_address(next_address);
 
+                
                 cout << "curr: " << current_address.as_string() << ", next:" <<next_address.as_string() << '\n';
+                
                 current_address = next_address;
             }            
             return new_route;
