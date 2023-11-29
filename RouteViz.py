@@ -15,6 +15,7 @@ def read_route_file(file_path:str):
 
 
 def display_route(file_path:str):
+    plt.figure()
     points = read_route_file(file_path)
     x, y = zip(*points)
 
@@ -31,8 +32,9 @@ def display_route(file_path:str):
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
 
-    # Show the plot
-    plt.show()
 
 display_route('saved_routes/initial_route.txt')
+display_route('saved_routes/greedy_route.txt')
 display_route('saved_routes/opt2_route.txt')
+display_route('saved_routes/best_route.txt')
+plt.show()

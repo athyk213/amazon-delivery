@@ -37,6 +37,18 @@ public:
         return i == other.get_i() && j == other.get_j();
     }
 
+    // defined lexicographical order for addresses
+    bool operator<(const Address& other) const {
+        if (i == other.get_i()){
+            return j < other.get_j();
+        }
+        else {
+            return i < other.get_i();
+        }
+
+    }
+
+
     string as_string() const {
         stringstream ss;
         ss << "(" << i << ", " << j << ")";
@@ -154,16 +166,12 @@ class Route: public AddressList {
 
                 // the next address in the route is the address closest to current
                 Address next_address = index_closest_to(current_address);
-                new_route.add_address(next_address);
-
-                
-                cout << "curr: " << current_address.as_string() << ", next:" <<next_address.as_string() << '\n';
-                
+                new_route.add_address(next_address);                
                 current_address = next_address;
             }            
             return new_route;
         }
-
+        // 2-opt heuristic
         void apply_2_opt() {
             bool improvement = true;
 
@@ -186,6 +194,29 @@ class Route: public AddressList {
                     }
                 }
             }
+        }
+//         // search through all possible routes
+        void apply_total_search(){
+            std::vector<Address> best_route = address_list; // Store the initial route as the best
+            double best_length = length(); // Calculate its length
+
+            // Copy the initial order of addresses for permutation
+            std::vector<Address> original_order = address_list;
+
+            // Find permutations and track the best route and length
+            sort(address_list.begin() + 1, address_list.end() - 1);
+            do {
+                double test_length = length(); // Calculate the length for the current permutation
+
+                if (test_length < best_length) {
+                    best_length = test_length; // Update the best length
+                    best_route = address_list; // Update the best route
+                }
+
+            } while (std::next_permutation(address_list.begin() + 1, address_list.end() - 1)); // Exclude the depot addresses
+
+            // Update the address_list to the best route found
+            address_list = best_route;
         }
 };
 
