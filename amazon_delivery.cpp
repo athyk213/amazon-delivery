@@ -109,29 +109,33 @@ class Route: public AddressList {
         }
 
         Route greedy_route() {
-        Route new_route;
-        std::vector<Address> address_list_greedy;
-        address_list_greedy = address_list;
+            Route new_route;
+            Address current_address = address_list[0];
 
-        Address current_address = address_list_greedy[0];
+            address_list.pop_back();
 
-        auto start = address_list_greedy.begin() + 1;
-        auto end = address_list_greedy.begin() ;
+            
+            //this goes to the closest then erases the index after
+            while (address_list.size() > 1) {
 
-        address_list_greedy.pop_back();
 
-        
-        //this goes to the closest then erases the index after
-        while (address_list.size()-1 > 0) {
-            address_list_greedy.erase(std::find(address_list_greedy.begin(),address_list_greedy.end(),current_address));
-            Address next_address = index_closest_to(current_address);
-            new_route.add_address(next_address);
-            current_address = next_address;
-        }
+                for (int i = 0; i < address_list.size(); i++){
+                    if (address_list[i] == current_address){
+                        address_list.erase(address_list.begin()+i);
+                        break;
+                    }
+                }
 
-        new_route.address_list.push_back(address_list_greedy[0]);
-        
-        return new_route;
+                Address next_address = index_closest_to(current_address);
+                new_route.add_address(next_address);
+
+                cout << "curr: " << current_address.get_address() << ", next:" <<next_address.get_address() << '\n';
+                current_address = next_address;
+            }
+
+            //new_route.address_list.push_back(address_list[0]);
+            
+            return new_route;
     }
 };
 
@@ -145,9 +149,10 @@ int main() {
 
     // Test case 1
     Route route1;
+    route1.add_address(Address(5, 6, "2023-12-02"));
     route1.add_address(Address(1, 2, "2023-12-01"));
     route1.add_address(Address(3, 4, "2023-12-02"));
-    route1.add_address(Address(5, 6, "2023-12-02"));
+
 
     cout << "Original Route 1: " << route1.as_string() << endl;
 
