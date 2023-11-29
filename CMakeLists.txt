@@ -8,3 +8,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(SmallTest src/SmallTest.cpp)
 target_include_directories(SmallTest PUBLIC include)
+
+add_executable(RandomAddresses src/RandomAddresses.cpp)
+target_include_directories(RandomAddresses PUBLIC include)
