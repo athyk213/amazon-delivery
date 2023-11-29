@@ -23,12 +23,14 @@ int main(){
 
     // Display the initial route
     std::cout << "Initial Route: " << route.as_string() << std::endl;
+    route.save_route("../saved_routes/initial_route.txt");
 
     // Apply the 2-opt heuristic
     route.apply_2_opt();
 
     // Display the optimized route
     std::cout << "Optimized Route: " << route.as_string() << std::endl;
+    route.save_route("../saved_routes/opt2_route.txt");
 
     return 0;
 

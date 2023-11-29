@@ -3,6 +3,8 @@
 #include <cmath>
 #include <vector>
 #include <sstream>
+#include <fstream>
+
 using namespace std;
 
 class Address {
@@ -87,7 +89,26 @@ class AddressList{
         }
 
 
+        void save_route(string file_name) {
+            // Open the file for writing
+            std::ofstream file(file_name);
+
+            // Check if the file is open
+            if (!file.is_open()) {
+                std::cerr << "Error opening file: " << file_name << std::endl;
+                return;
+            }
+
+            // Write each address to the file
+            for (const auto& addr : address_list) {
+                file << addr.as_string() << std::endl;
+            }
+
+            // Close the file
+            file.close();
+        }
 };
+
 
 class Route: public AddressList {
     public:
