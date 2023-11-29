@@ -35,7 +35,7 @@ public:
         return i == other.get_i() && j == other.get_j();
     }
 
-    string get_address() const {
+    string as_string() const {
         stringstream ss;
         ss << "(" << i << ", " << j << ")";
         return ss.str();
@@ -80,7 +80,7 @@ class AddressList{
             std::stringstream ss;
 
             for (const auto& addr : address_list) {
-                ss << addr.get_address() << " ";
+                ss << addr.as_string() << " ";
             }
 
             return ss.str();
@@ -129,12 +129,9 @@ class Route: public AddressList {
                 Address next_address = index_closest_to(current_address);
                 new_route.add_address(next_address);
 
-                cout << "curr: " << current_address.get_address() << ", next:" <<next_address.get_address() << '\n';
+                cout << "curr: " << current_address.as_string() << ", next:" <<next_address.as_string() << '\n';
                 current_address = next_address;
-            }
-
-            //new_route.address_list.push_back(address_list[0]);
-            
+            }            
             return new_route;
     }
 };
@@ -161,6 +158,15 @@ int main() {
     cout << "Greedy Route 1: " << greedyRoute1.as_string() << endl;
     cout << "Original Route 1 Length: " << route1.length() << endl;
     cout << "Greedy Route 1 Length: " << greedyRoute1.length() << endl;
+
+    cout << "Text book test case \n";
+    Route deliveries; deliveries.add_address( Address(0,5));
+    deliveries.add_address( Address(5,0));
+    deliveries.add_address( Address(5,5));
+    cout << "Travel in order: " << deliveries.length() << '\n';; 
+    auto route2 = deliveries.greedy_route();  
+    auto len = route2.length(); 
+    cout << "Square route: " << route2.as_string() << "\n has length " << len << '\n';
 
     return 0;
 }
