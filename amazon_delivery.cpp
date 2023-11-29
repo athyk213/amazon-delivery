@@ -107,6 +107,32 @@ class Route: public AddressList {
             // Keep first and last element the same
             address_list.insert(address_list.begin() + address_list.size() - 1, address);
         }
+
+        Route greedy_route() {
+        Route new_route;
+        std::vector<Address> address_list_greedy;
+        address_list_greedy = address_list;
+
+        Address current_address = address_list_greedy[0];
+
+        auto start = address_list_greedy.begin() + 1;
+        auto end = address_list_greedy.begin() ;
+
+        address_list_greedy.pop_back();
+
+        
+        //this goes to the closest then erases the index after
+        while (address_list.size()-1 > 0) {
+            address_list_greedy.erase(std::find(address_list_greedy.begin(),address_list_greedy.end(),current_address));
+            Address next_address = index_closest_to(current_address);
+            new_route.add_address(next_address);
+            current_address = next_address;
+        }
+
+        new_route.address_list.push_back(address_list_greedy[0]);
+        
+        return new_route;
+    }
 };
 
 int main() {
@@ -116,6 +142,20 @@ int main() {
     route.add_address(Address(5, 6, "2023-12-02"));
 
     cout << route.as_string();
+
+    // Test case 1
+    Route route1;
+    route1.add_address(Address(1, 2, "2023-12-01"));
+    route1.add_address(Address(3, 4, "2023-12-02"));
+    route1.add_address(Address(5, 6, "2023-12-02"));
+
+    cout << "Original Route 1: " << route1.as_string() << endl;
+
+    Route greedyRoute1 = route1.greedy_route();
+
+    cout << "Greedy Route 1: " << greedyRoute1.as_string() << endl;
+    cout << "Original Route 1 Length: " << route1.length() << endl;
+    cout << "Greedy Route 1 Length: " << greedyRoute1.length() << endl;
 
     return 0;
 }
