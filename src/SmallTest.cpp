@@ -1,27 +1,43 @@
 #include "amazon_delivery.hpp"
 
 int main() {
-    // Create addresses
-    Address address1(1, 0, "2023-12-01");
-    Address address2(0, 1, "2023-12-02");
-    Address address3(1, 1, "2023-12-03");
+    // Create addresses and routes
+    Address address1(0, 2, "2023-12-01");
+    Address address2(2, 3, "2023-12-02");
+    Address address3(3, 2, "2023-12-03");
+    Address address4(2, 0, "2023-12-03");
+    Address address5(1, 3, "2023-12-03");
+    Address address6(1, 2, "2023-12-03");
+    Address address7(2, 1, "2023-12-03");
+    Address address8(3, 1, "2023-12-03");
 
-    // Create a Route
-    Route route;
+    Route route1;
+    route1.add_address(address1);
+    route1.add_address(address2);
+    route1.add_address(address3);
+    route1.add_address(address4);
 
-    // Add addresses to the route
-    route.add_address(address1);
-    route.add_address(address2);
-    route.add_address(address3);
+    Route route2;
+    route2.add_address(address5);
+    route2.add_address(address6);
+    route2.add_address(address7);
+    route2.add_address(address8);
 
-    // Display the initial route
-    std::cout << "Initial Route: " << route.as_string() << std::endl;
+    // Display the initial routes and lengths of each
+    std::cout << "Initial Route 1: " << route1.as_string() << std::endl;
+    std::cout << "Initial Route 2: " << route2.as_string() << std::endl;
+    std::cout << "Length of Route 1: " << route1.length() << std::endl;
+    std::cout << "Length of Route 2: " << route2.length() << std::endl;
+    std::cout << "Length of Route 1 + 2: " << (route1.length() + route2.length()) << std::endl;
 
-    // Apply the 2-opt heuristic
-    route.apply_2_opt();
+    std::vector<Route> optimized_routes = route1.multi_path_apply_2_opt(route2);
 
-    // Display the optimized route
-    std::cout << "Optimized Route: " << route.as_string() << std::endl;
+    // Display the optimized routes and lengths of each
+    std::cout << "Optimized Route 1: " << optimized_routes[0].as_string() << std::endl;
+    std::cout << "Optimized Route 2: " << optimized_routes[1].as_string() << std::endl;
+    std::cout << "Length of Route 1: " << optimized_routes[0].length() << std::endl;
+    std::cout << "Length of Route 2: " << optimized_routes[1].length() << std::endl;
+    std::cout << "Length of Route 1 + 2: " << (optimized_routes[0].length() + optimized_routes[1].length()) << std::endl;
 
     return 0;
 }

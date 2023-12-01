@@ -24,7 +24,7 @@ public:
     }
 
     // manhattan_distance and straight line mehtod
-    double distance(const Address& additional_addresses, bool manhattan_distance = true) const {
+    double distance(const Address& additional_addresses, bool manhattan_distance = false) const {
         if (manhattan_distance) {
             return std::abs(i - additional_addresses.i) + std::abs(j - additional_addresses.j);
         } else {
@@ -195,7 +195,44 @@ class Route: public AddressList {
                 }
             }
         }
-//         // search through all possible routes
+
+        // Multiple trucks
+        std::vector<Route> multi_path_apply_2_opt(Route &rt2) {
+            Route rt1 = Route(*this);
+            rt1.apply_2_opt();
+            rt2.apply_2_opt();
+            double sum_lengths = rt1.length() + rt2.length();
+            double curr_length = INFINITY;
+
+            bool improvement = true;
+
+            while (improvement) {
+                improvement = false;
+
+                for (size_t i = 1; i < rt1.address_list.size() - 2; ++i) {
+                    // Check if the new connection is shorter
+                    std::swap(rt1.address_list[i], rt2.address_list[i]);
+                    std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
+
+                    // Calculate the current length
+                    curr_length = rt1.length() + rt2.length();
+
+                    // Check if the current length is better than the sum of lengths
+                    if (curr_length < sum_lengths) {
+                        sum_lengths = curr_length;
+                        improvement = true;
+                    } else {
+                        // If not, swap elements back to the original state
+                        std::swap(rt1.address_list[i], rt2.address_list[i]);
+                        std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
+                    }
+                }
+            }
+
+            return {rt1, rt2};
+        }
+
+       // search through all possible routes
         void apply_total_search(){
             std::vector<Address> best_route = address_list; // Store the initial route as the best
             double best_length = length(); // Calculate its length
