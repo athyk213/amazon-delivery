@@ -24,7 +24,7 @@ public:
     }
 
     // manhattan_distance and straight line mehtod
-    double distance(const Address& additional_addresses, bool manhattan_distance = false) const {
+    double distance(const Address& additional_addresses, bool manhattan_distance = true) const {
         if (manhattan_distance) {
             return std::abs(i - additional_addresses.i) + std::abs(j - additional_addresses.j);
         } else {
@@ -98,26 +98,6 @@ class AddressList{
             }
 
             return ss.str();
-        }
-
-
-        void save_route(string file_name) {
-            // Open the file for writing
-            std::ofstream file(file_name);
-
-            // Check if the file is open
-            if (!file.is_open()) {
-                std::cerr << "Error opening file: " << file_name << std::endl;
-                return;
-            }
-
-            // Write each address to the file
-            for (const auto& addr : address_list) {
-                file << addr.as_string() << std::endl;
-            }
-
-            // Close the file
-            file.close();
         }
 };
 
@@ -254,6 +234,29 @@ class Route: public AddressList {
 
             // Update the address_list to the best route found
             address_list = best_route;
+        }
+
+        void save_routes(string file_name, Route &rt2) {
+            // Open the file for writing
+            std::ofstream file(file_name);
+
+            // Check if the file is open
+            if (!file.is_open()) {
+                std::cerr << "Error opening file: " << file_name << std::endl;
+                return;
+            }
+
+            // Write each address to the file
+            for (const auto& addr : address_list) {
+                file << addr.as_string() << std::endl;
+            }
+
+            for (const auto& addr : rt2.address_list) {
+                file << addr.as_string() << std::endl;
+            }
+
+            // Close the file
+            file.close();
         }
 };
 
