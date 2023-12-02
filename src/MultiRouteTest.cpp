@@ -1,30 +1,30 @@
 #include "multi_route.hpp"
+#include <random>
+#include <ctime>
+
 
 int main(){
-    Address addr1(1,1);
-    Address addr2(4,5);
-    Address addr3(2,3);
-    Address addr4(8,7);   
-    Address addr5(5,9);
-    Address addr6(-2,-7);    
+    int number_of_addresses = 40;
 
-    vector<Address> addr_vec = {addr1,addr2,addr3,addr4,addr5,addr6};
+    // rng seed and distribution
+    std::default_random_engine generator(std::time(nullptr));
+    std::uniform_real_distribution<double> distribution(-1000,1000);
+    double randomDouble1, randomDouble2;
 
-    Route rt1, rt2;
-    rt1.add_address(addr1);
-    rt1.add_address(addr2);
-    rt1.add_address(addr3);
-    rt2.add_address(addr4);
-    rt2.add_address(addr5);
-    rt2.add_address(addr6);
+    // Generate random doubles between -10 and 10
+    vector<Address> address_vec;
+    for (int i = 1; i <= number_of_addresses; i++){
+        randomDouble1 = distribution(generator);
+        randomDouble2 = distribution(generator);
+        Address rand_address1(randomDouble1, randomDouble2);
+        address_vec.push_back(rand_address1);
+    }
 
-    vector<Route> rt_vec = {rt1,rt2};
+    // multi route testing
+    MultiRoute mrt(4, address_vec);
+    mrt.show_routes();
+    mrt.optimize_routes();
+    mrt.show_routes();
 
-    MultiRoute multi_rt_a(rt_vec);
-    MultiRoute multi_rt_b(2,addr_vec);
-
-    cout << "multi route A\n";
-    multi_rt_a.show_routes();
-    cout << "multi route B\n";
-    multi_rt_b.show_routes();
+    return 0;
 }
