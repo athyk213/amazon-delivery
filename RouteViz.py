@@ -33,8 +33,9 @@ def display_route(file_path:str):
     plt.ylabel('Y-axis')
 
 
-display_route('saved_routes/initial_route.txt')
-display_route('saved_routes/greedy_route.txt')
-display_route('saved_routes/opt2_route.txt')
-display_route('saved_routes/best_route.txt')
-plt.show()
+if __name__ == '__main__':
+    display_route('saved_routes/initial_route.txt')
+    display_route('saved_routes/greedy_route.txt')
+    display_route('saved_routes/opt2_route.txt')
+    display_route('saved_routes/best_route.txt')
+    plt.show()

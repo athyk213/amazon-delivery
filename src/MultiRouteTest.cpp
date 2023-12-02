@@ -21,12 +21,24 @@ int main(){
     }
 
     // multi route testing
-    MultiRoute mrt(4, address_vec);
-    mrt.show_routes();
+    MultiRoute mrt(2, address_vec);
+    cout << "2 route Unoptimized Length: " << mrt.total_length() << '\n';
     mrt.save_routes("../saved_routes/MultiRouteUnOpt.txt");
+    
+    
     mrt.optimize_routes();
-    mrt.show_routes();
+    cout << "2 route Optimized Length: " << mrt.total_length() << '\n';
     mrt.save_routes("../saved_routes/MultiRouteOpt.txt");
+
+    // single route testing on same addresses
+    MultiRoute mrt1(1, address_vec);
+    cout << "1 route Unoptimized Length: " << mrt1.total_length() << '\n';
+    mrt.save_routes("../saved_routes/SingleRouteUnOpt.txt");
+    
+    
+    mrt.optimize_routes();
+    cout << "1 route Optimized Length: " << mrt1.total_length() << '\n';
+    mrt.save_routes("../saved_routes/SingleRouteOpt.txt");
 
     return 0;
 }

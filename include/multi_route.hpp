@@ -47,6 +47,27 @@ class MultiRoute{
             }
         }
 
+        // save method
+        // all routes are saved in one folder
+        void save_routes(string file_name) {
+            // Open the file for writing
+            std::ofstream file(file_name);
+
+            // Check if the file is open
+            if (!file.is_open()) {
+                std::cerr << "Error opening file: " << file_name << std::endl;
+                return;
+            }
+
+            // Write each address to the file
+            for (int i = 0; i < num_routes; i++){
+                file << all_routes[i].as_string() << std::endl;
+            }
+
+            // Close the file
+            file.close();
+        }
+        
         // length
         double total_length(){
             double length = 0;
