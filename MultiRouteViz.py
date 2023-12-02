@@ -57,4 +57,10 @@ display_route('saved_routes/MultiRouteOpt.txt')
 plt.figure()
 display_route('saved_routes/MultiRouteUnOpt.txt')
 
+plt.figure()
+display_route('saved_routes/SingleRouteOpt.txt')
+
+plt.figure()
+display_route('saved_routes/SingleRouteUnOpt.txt')
+
 plt.show()

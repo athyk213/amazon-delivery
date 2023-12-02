@@ -67,7 +67,7 @@ class MultiRoute{
             // Close the file
             file.close();
         }
-        
+
         // length
         double total_length(){
             double length = 0;

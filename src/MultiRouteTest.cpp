@@ -33,12 +33,12 @@ int main(){
     // single route testing on same addresses
     MultiRoute mrt1(1, address_vec);
     cout << "1 route Unoptimized Length: " << mrt1.total_length() << '\n';
-    mrt.save_routes("../saved_routes/SingleRouteUnOpt.txt");
+    mrt1.save_routes("../saved_routes/SingleRouteUnOpt.txt");
     
     
-    mrt.optimize_routes();
+    mrt1.optimize_routes();
     cout << "1 route Optimized Length: " << mrt1.total_length() << '\n';
-    mrt.save_routes("../saved_routes/SingleRouteOpt.txt");
+    mrt1.save_routes("../saved_routes/SingleRouteOpt.txt");
 
     return 0;
 }
