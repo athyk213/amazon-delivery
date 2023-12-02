@@ -60,6 +60,7 @@ class AddressList{
     protected:
         std::vector<Address> address_list;
     public:
+
         virtual void add_address(Address address){
             // add address to address list
             address_list.push_back(address);
@@ -107,6 +108,14 @@ class Route: public AddressList {
         Route(){
             address_list.push_back(Address(0,0));
             address_list.push_back(Address(0,0));
+        }
+
+        Route(vector<Address> addresses){
+            address_list.push_back(Address(0,0));
+            address_list.push_back(Address(0,0));
+            for (int i = 0; i < addresses.size(); i++){
+                add_address(addresses[i]);
+            }
         }
 
         void add_address(Address address) override {
