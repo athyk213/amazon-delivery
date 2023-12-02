@@ -23,8 +23,10 @@ int main(){
     // multi route testing
     MultiRoute mrt(4, address_vec);
     mrt.show_routes();
+    mrt.save_routes("../saved_routes/MultiRouteUnOpt.txt");
     mrt.optimize_routes();
     mrt.show_routes();
+    mrt.save_routes("../saved_routes/MultiRouteOpt.txt");
 
     return 0;
 }
