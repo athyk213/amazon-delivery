@@ -11,9 +11,12 @@ class Address {
 private:
     int i, j;
     std::string Last_possible_delivery_date;
+    bool prime_member;
 public:
     // Constructor
-    Address(int i, int j, std::string Last_possible_delivery_date = "No_Date") : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) {}
+    Address(int i, int j, std::string Last_possible_delivery_date = "No_Date" ) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) {}
+
+    // Address(int i, int j, std::string Last_possible_delivery_date = "No_Date" , bool prime_member = false) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) , prime_member(prime_member) {}
     Address(){}
     double get_i() const {
         return i;
@@ -54,13 +57,17 @@ public:
         ss << "(" << i << ", " << j << ")";
         return ss.str();
     }
+
+    bool is_prime_member() const {
+        return prime_member;
+    }
 };
 
 class AddressList{
     protected:
         std::vector<Address> address_list;
     public:
-    
+
         virtual void add_address(Address address){
             // add address to address list
             address_list.push_back(address);
@@ -103,7 +110,7 @@ class AddressList{
 };
 
 
-class Route: public AddressList {
+class Route: public AddressList{
     public:
         Route(){
             address_list.push_back(Address(0,0));
@@ -136,7 +143,7 @@ class Route: public AddressList {
             // initialize a new route starting at the depot
             Route new_route;
             Address current_address = address_list[0];
-            
+
             // remove the last stop (the depot)
             address_list.pop_back();
 
@@ -155,9 +162,9 @@ class Route: public AddressList {
 
                 // the next address in the route is the address closest to current
                 Address next_address = index_closest_to(current_address);
-                new_route.add_address(next_address);                
+                new_route.add_address(next_address);
                 current_address = next_address;
-            }            
+            }
             return new_route;
         }
         // 2-opt heuristic
@@ -199,7 +206,8 @@ class Route: public AddressList {
                 improvement = false;
 
                 for (size_t i = 1; i < rt1.address_list.size() - 2; ++i) {
-                    // Check if the new connection is shorter
+                    // Check if the new connection is shorter and checks if they can be swapped
+                    // if (has_prime_member(rt1.address_list[i]) && rt2.address_list[i].is_prime_member() == false) {
                     std::swap(rt1.address_list[i], rt2.address_list[i]);
                     std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
 
@@ -215,6 +223,7 @@ class Route: public AddressList {
                         std::swap(rt1.address_list[i], rt2.address_list[i]);
                         std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
                     }
+                    // }
                 }
             }
 
@@ -245,24 +254,6 @@ class Route: public AddressList {
             address_list = best_route;
         }
 
-        // save one route into one file
-        void save_route(string file_name){
-            // Open the file for writing
-            std::ofstream file(file_name);
-
-            // Check if the file is open
-            if (!file.is_open()) {
-                std::cerr << "Error opening file: " << file_name << std::endl;
-                return;
-            }
-
-            // Write each address to the file
-            for (const auto& addr : address_list) {
-                file << addr.as_string() << std::endl;
-            }
-         }
-
-        // save two routes into one file
         void save_routes(string file_name, Route &rt2) {
             // Open the file for writing
             std::ofstream file(file_name);
@@ -285,6 +276,18 @@ class Route: public AddressList {
             // Close the file
             file.close();
         }
+
+        // bool has_prime_member(Address &rt1) const {
+        // for (const auto& addr : address_list) {
+        //     if (addr.is_prime_member()) {
+        //         return true;
+        //     }
+        // }
+        // return false;
+        // }
+
+
+
 };
 
 // int main() {
