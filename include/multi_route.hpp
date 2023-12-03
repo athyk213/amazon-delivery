@@ -110,7 +110,7 @@ class MultiRoute{
                 }
 
                 // check if there was improvement
-                if (total_length() > initial_length){
+                if (total_length() < initial_length){
                     improvement = true;
                 }
 
