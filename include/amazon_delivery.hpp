@@ -191,39 +191,100 @@ class Route: public AddressList{
                 }
             }
         }
+        // Returns the improvement for a potential swap
+        // i_1, i_2: start and end indicies of 1 segement in rt1
+        // j_1, j_2: start and end indicies of 1 segement in rt2
+        // leaves the segements unswapped
+        double swap_improvement(Route &rt2, int i_1, int i_2, int j_1, int j_2){
+            Route rt1 = Route(*this);
+            
+            double initial_length = rt1.length() + rt2.length();
+
+            // swap segements
+            std::swap(rt1.address_list[i_1], rt2.address_list[j_1]);
+            std::swap(rt1.address_list[i_2], rt2.address_list[j_2]);
+
+            double improvement = initial_length - (rt1.length() + rt2.length());
+
+            // swap back segements
+            std::swap(rt1.address_list[i_1], rt2.address_list[j_1]);
+            std::swap(rt1.address_list[i_2], rt2.address_list[j_2]);
+
+            return improvement;
+        }
+
+        // Given the two segements in two routes, perform the action that maxmizes improvement
+        // Checks all possible directions of tours
+        // returns bool, True if swapping causes improvement, False if no swaps.
+        bool do_best_swap(Route &rt2, int i_1, int i_2, int j_1, int j_2){
+            Route rt1 = Route(*this);
+            
+            // Get the improvement for each potential swap direction
+            vector<vector<int>> swaps_to_test = {
+                {i_1,i_2,j_1,j_2}, 
+                {i_2,i_1,j_1,j_2},
+                {i_1,i_2,j_2,j_1},
+                {i_2,i_1,j_2,j_1}
+            };
+            
+            vector<double> improvements;
+
+            for (vector<int> potential_swap: swaps_to_test){
+                int rt1_start = potential_swap[0];
+                int rt1_end = potential_swap[1];
+                int rt2_start = potential_swap[2];
+                int rt2_end = potential_swap[3];
+                double potential_improvement = swap_improvement(rt2, rt1_start,rt1_end,rt2_start,rt2_end);
+                improvements.push_back(potential_improvement);
+            }
+            
+            // perform the best action (maxmial improvement)
+            auto max_improvement = std::max_element(improvements.begin(),improvements.end());
+
+            // don't swap if there's no improvement
+            if (*max_improvement <= 0 ){
+                return false;
+            }
+            int maxIndex = std::distance(improvements.begin(), max_improvement);
+            vector<int> best_swap = swaps_to_test[maxIndex];
+            int rt1_start = best_swap[0];
+            int rt1_end = best_swap[1];
+            int rt2_start = best_swap[2];
+            int rt2_end = best_swap[3];
+
+            std::swap(rt1.address_list[rt1_start], rt2.address_list[rt2_start]);
+            std::swap(rt1.address_list[rt1_end], rt2.address_list[rt2_end]);
+            cout << "swapped between routes \n";
+            return true;
+        }
 
         // Multiple trucks
         std::vector<Route> multi_path_apply_2_opt(Route &rt2) {
             Route rt1 = Route(*this);
-            rt1.apply_2_opt();
-            rt2.apply_2_opt();
-            double sum_lengths = rt1.length() + rt2.length();
-            double curr_length = INFINITY;
 
             bool improvement = true;
 
+            // Keep swapping segements until no more improvement is found
             while (improvement) {
                 improvement = false;
 
+                // select any two segements both routes
                 for (size_t i = 1; i < rt1.address_list.size() - 2; ++i) {
-                    // Check if the new connection is shorter and checks if they can be swapped
-                    // if (has_prime_member(rt1.address_list[i]) && rt2.address_list[i].is_prime_member() == false) {
-                    std::swap(rt1.address_list[i], rt2.address_list[i]);
-                    std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
+                    for (size_t j = 1; j < rt2.address_list.size() - 2; ++j){
+                        int rt1_start = i;
+                        int rt1_end = i+1;
+                        int rt2_start = j;
+                        int rt2_end = j + 1;
 
-                    // Calculate the current length
-                    curr_length = rt1.length() + rt2.length();
 
-                    // Check if the current length is better than the sum of lengths
-                    if (curr_length < sum_lengths) {
-                        sum_lengths = curr_length;
-                        improvement = true;
-                    } else {
-                        // If not, swap elements back to the original state
-                        std::swap(rt1.address_list[i], rt2.address_list[i]);
-                        std::swap(rt1.address_list[i + 1], rt2.address_list[i + 1]);
+                        // try swapping the two segements
+                        bool found_improvement = do_best_swap(rt2, rt1_start,rt1_end,rt2_start,rt2_end);
+
+                        // flag improvement true if any improvement is found
+                        if ( !improvement and found_improvement){
+                            improvement = true;
+                        }
                     }
-                    // }
                 }
             }
 

@@ -88,8 +88,10 @@ class MultiRoute{
             // keep optimizing until no more improvement
             double initial_length;
             bool improvement = true;
+            int n = 0;
             while (improvement == true){
-                
+                n++;
+                cout << "n = " << n <<'\n';
                 improvement = false;
                 initial_length = total_length();
 

@@ -4,11 +4,11 @@
 
 
 int main(){
-    int number_of_addresses = 40;
+    int number_of_addresses = 15;
 
     // rng seed and distribution
     std::default_random_engine generator(std::time(nullptr));
-    std::uniform_real_distribution<double> distribution(-1000,1000);
+    std::uniform_real_distribution<double> distribution(0,1000);
     double randomDouble1, randomDouble2;
 
     // Generate random doubles between -10 and 10
@@ -21,7 +21,7 @@ int main(){
     }
 
     // multi route testing
-    MultiRoute mrt(2, address_vec);
+    MultiRoute mrt(3, address_vec);
     cout << "2 route Unoptimized Length: " << mrt.total_length() << '\n';
     mrt.save_routes("../saved_routes/MultiRouteUnOpt.txt");
     
