@@ -9,8 +9,11 @@ set(CMAKE_CXX_STANDARD 11)
 add_executable(SmallTest src/SmallTest.cpp)
 target_include_directories(SmallTest PUBLIC include)
 
-add_executable(RandomAddresses src/RandomAddresses.cpp)
-target_include_directories(RandomAddresses PUBLIC include)
+# add_executable(RandomAddresses src/RandomAddresses.cpp)
+# target_include_directories(RandomAddresses PUBLIC include)
 
 add_executable(MultiRouteTest src/MultiRouteTest.cpp)
 target_include_directories(MultiRouteTest PUBLIC include)
+
+add_executable(TextbookMultiTest src/TextbookMultiCase.cpp)
+target_include_directories(TextbookMultiTest PUBLIC include)

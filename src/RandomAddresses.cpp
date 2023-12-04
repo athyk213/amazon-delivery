@@ -5,7 +5,7 @@
 #include <ctime>
 
 int main(){
-    int number_of_addresses = 12;
+    int number_of_addresses = 30;
 
     Route rt1, rt2;
 

@@ -107,10 +107,19 @@ class MultiRoute{
                     for (int j = i+1 ; j < num_routes; j++){
                         Route rt1 = all_routes[i];
                         Route rt2 = all_routes[j];
-                        vector<Route> _ = rt1.multi_path_apply_2_opt(rt2);
+                        vector<Route> new_routes = multi_path_apply_2_opt(rt1,rt2);
+                        all_routes[i] = new_routes[0];
+                        all_routes[j] = new_routes[1];
                     }
                 }
-
+                cout << 'A';
+                // apply 2 opt individually
+                // TODO: Paralleize this
+                for (int i = 0; i < num_routes ; i++){
+                    all_routes[i].apply_2_opt();
+                }
+                
+                cout << 'B';
                 // check if there was improvement
                 if (total_length() < initial_length){
                     improvement = true;

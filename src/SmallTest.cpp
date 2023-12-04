@@ -2,10 +2,10 @@
 
 int main() {
     // Create addresses and routes
-    Address address1(0, 2, "2023-12-01");
-    Address address2(2, 3, "2023-12-02");
-    Address address3(3, 2, "2023-12-03");
-    Address address4(2, 0, "2023-12-03");
+    Address address1(0, 2, "2023-12-01", false);
+    Address address2(2, 3, "2023-12-02", false);
+    Address address3(3, 2, "2023-12-03", false);
+    Address address4(2, 0, "2023-12-03", false);
     Address address5(1, 3, "2023-12-03");
     Address address6(1, 2, "2023-12-03");
     Address address7(2, 1, "2023-12-03");
@@ -30,9 +30,9 @@ int main() {
     std::cout << "Length of Route 2: " << route2.length() << std::endl;
     std::cout << "Length of Route 1 + 2: " << (route1.length() + route2.length()) << std::endl;
 
-    std::vector<Route> optimized_routes = route1.multi_path_apply_2_opt(route2);
+    std::vector<Route> optimized_routes = multi_path_apply_2_opt(route1, route2);
 
-    // Display the optimized routes and lengths of each
+    // Display the optimized routes and lengths of false
     std::cout << "Optimized Route 1: " << optimized_routes[0].as_string() << std::endl;
     std::cout << "Optimized Route 2: " << optimized_routes[1].as_string() << std::endl;
     std::cout << "Length of Route 1: " << optimized_routes[0].length() << std::endl;

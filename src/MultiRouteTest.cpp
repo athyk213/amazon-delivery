@@ -4,7 +4,7 @@
 
 
 int main(){
-    int number_of_addresses = 15;
+    int number_of_addresses = 30;
 
     // rng seed and distribution
     std::default_random_engine generator(std::time(nullptr));
