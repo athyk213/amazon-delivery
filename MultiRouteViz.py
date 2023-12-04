@@ -11,7 +11,6 @@ def read_multi_route_file(file_path:str):
 
     routes = []
 
-    
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -51,16 +50,17 @@ def display_route(file_path:str):
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
 
-plt.figure()
-display_route('saved_routes/MultiRouteOpt.txt')
+if __name__ == '__main__':
+    plt.figure()
+    display_route('saved_routes/MultiRouteOpt.txt')
 
-plt.figure()
-display_route('saved_routes/MultiRouteUnOpt.txt')
+    plt.figure()
+    display_route('saved_routes/MultiRouteUnOpt.txt')
 
-plt.figure()
-display_route('saved_routes/SingleRouteOpt.txt')
+    plt.figure()
+    display_route('saved_routes/SingleRouteOpt.txt')
 
-plt.figure()
-display_route('saved_routes/SingleRouteUnOpt.txt')
+    plt.figure()
+    display_route('saved_routes/SingleRouteUnOpt.txt')
 
-plt.show()
+    plt.show()
