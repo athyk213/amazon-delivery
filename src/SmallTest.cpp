@@ -18,10 +18,10 @@ int main() {
     route1.add_address(address4);
 
     Route route2;
-    route2.add_address(address5);
-    route2.add_address(address6);
-    route2.add_address(address7);
     route2.add_address(address8);
+    route2.add_address(address7);
+    route2.add_address(address6);
+    route2.add_address(address5);
 
     // Display the initial routes and lengths of each
     std::cout << "Initial Route 1: " << route1.as_string() << std::endl;
