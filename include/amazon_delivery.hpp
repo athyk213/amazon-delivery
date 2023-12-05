@@ -356,79 +356,88 @@ std::vector<Route> multi_path_apply_2_opt(Route &rt1, Route &rt2) {
                 // keep the swap and flag improvement if swap decreases length
                 if ((rt1.length() + rt2.length()) < initial_length){
                     improvement = true;
+                    continue;
                 }
 
                 // otherwise swap back 
                 else{
                     std::swap(rt1.address_list[i], rt2.address_list[j]);
                     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-                    continue;
                 }
                 /////////////////////////////////////////////
                 // try swapping segements - flip both segment
+                cout << "Before \n";
+                cout << "rt1: " << rt1.as_string() << '\n';
+                cout << "rt2: " << rt2.as_string() << '\n';
+
                 std::swap(rt1.address_list[i], rt2.address_list[j+1]);
                 std::swap(rt1.address_list[i+1], rt2.address_list[j]);
+
+                cout << "After \n";
+                cout << "rt1: " << rt1.as_string() << '\n';
+                cout << "rt2: " << rt2.as_string() << '\n';
 
                 // keep the swap and flag improvement if swap decreases length
                 if ((rt1.length() + rt2.length()) < initial_length){
                     improvement = true;
+                    continue;
                 }
 
                 // otherwise swap back
                 else{
                     std::swap(rt1.address_list[i], rt2.address_list[j+1]);
                     std::swap(rt1.address_list[i+1], rt2.address_list[j]);
-                    continue;
+
                 }
-                /////////////////////////////////////////////
-                // try swapping segements - only 1 segment
-                // swap route 1's segmenet
-                std::swap(rt1.address_list[i],rt1.address_list[i+1]);
+                // /////////////////////////////////////////////
+                // // try swapping segements - only 1 segment
+                // // swap route 1's segmenet
+                // std::swap(rt1.address_list[i],rt1.address_list[i+1]);
 
-                // swap between route 1 and route 2
-                std::swap(rt1.address_list[i], rt2.address_list[i+1]);
-                std::swap(rt1.address_list[j], rt2.address_list[j+1]);
+                // // swap between route 1 and route 2
+                // std::swap(rt1.address_list[i], rt2.address_list[j]);
+                // std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
 
-                // keep the swap and flag improvement if swap decreases length
-                if ((rt1.length() + rt2.length()) < initial_length){
-                    improvement = true;
-                }
+                // // keep the swap and flag improvement if swap decreases length
+                // if ((rt1.length() + rt2.length()) < initial_length){
+                //     improvement = true;
+                //     continue;
+                // }
 
-                // otherwise swap back: just apply the original swap procedures in reverse order
-                else{
-                    // swap addresses
-                    std::swap(rt1.address_list[i], rt2.address_list[j+1]);
-                    std::swap(rt1.address_list[i+1], rt2.address_list[j]);
+                // // otherwise swap back: just apply the original swap procedures in reverse order
+                // else{
+                //     // swap addresses
+                //     std::swap(rt1.address_list[i], rt2.address_list[j]);
+                //     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
 
-                    // swap route 1's segmenet
-                    std::swap(rt1.address_list[i],rt1.address_list[i+1]);
-                    continue;
-                }
+                //     // swap route 1's segmenet
+                //     std::swap(rt1.address_list[i],rt1.address_list[i+1]);
+                // }
 
-                /////////////////////////////////////////////
-                // try swapping segements - only 1 segment
-                // swap route 2's segmenet
-                std::swap(rt2.address_list[j],rt2.address_list[j+1]);
+                // /////////////////////////////////////////////
+                // // try swapping segements - only 1 segment
+                // // swap route 2's segmenet
+                // std::swap(rt2.address_list[j],rt2.address_list[j+1]);
 
-                // swap between route 1 and route 2
-                std::swap(rt1.address_list[i], rt2.address_list[i+1]);
-                std::swap(rt1.address_list[j], rt2.address_list[j+1]);
+                // // swap between route 1 and route 2
+                // std::swap(rt1.address_list[i], rt2.address_list[j]);
+                // std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
 
-                // keep the swap and flag improvement if swap decreases length
-                if ((rt1.length() + rt2.length()) < initial_length){
-                    improvement = true;
-                }
+                // // keep the swap and flag improvement if swap decreases length
+                // if ((rt1.length() + rt2.length()) < initial_length){
+                //     improvement = true;
+                //     continue;
+                // }
 
-                // otherwise swap back: just apply the original swap procedures in reverse order
-                else{
-                    // swap addresses
-                    std::swap(rt1.address_list[i], rt2.address_list[j+1]);
-                    std::swap(rt1.address_list[i+1], rt2.address_list[j]);
+                // // otherwise swap back: just apply the original swap procedures in reverse order
+                // else{
+                //     // swap addresses
+                //     std::swap(rt1.address_list[i], rt2.address_list[j]);
+                //     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
 
-                    // swap route 2's segmenet
-                    std::swap(rt2.address_list[j],rt2.address_list[j+1]);
-                    continue;
-                }
+                //     // swap route 2's segmenet
+                //     std::swap(rt2.address_list[j],rt2.address_list[j+1]);
+                // }
             }
         }
     }
