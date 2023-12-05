@@ -17,3 +17,6 @@ target_include_directories(MultiRouteTest PUBLIC include)
 
 add_executable(TextbookMultiTest src/TextbookMultiCase.cpp)
 target_include_directories(TextbookMultiTest PUBLIC include)
+
+add_executable(RuntimeAnalysis src/RuntimeAnalysis.cpp)
+target_include_directories(RuntimeAnalysis PUBLIC include)
