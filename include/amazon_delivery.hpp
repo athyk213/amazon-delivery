@@ -173,7 +173,6 @@ class Route: public AddressList{
             bool improvement = true;
 
             while (improvement) {
-                cout << "in apply_2_opt \n";
                 improvement = false;
 
                 for (size_t i = 1; i < address_list.size() - 2; ++i) {
@@ -184,8 +183,6 @@ class Route: public AddressList{
                                                 address_list[i - 1].distance(address_list[i]) -
                                                 address_list[j].distance(address_list[j + 1]);
 
-                        cout << delta_distance << '\n';
-
                         if (delta_distance + TOL < 0) {
                             // If the new connection is shorter, reverse the portion of the tour
                             reverse(address_list.begin() + i, address_list.begin() + j + 1);
@@ -195,74 +192,7 @@ class Route: public AddressList{
                 }
             }
         }
-        
-        // Returns the improvement for a potential swap
-        // i_1, i_2: start and end indicies of 1 segement in rt1
-        // j_1, j_2: start and end indicies of 1 segement in rt2
-        // leaves the segements unswapped
-        double swap_improvement(Route &rt2, int i_1, int i_2, int j_1, int j_2){
-            Route rt1 = Route(*this);
-            
-            double initial_length = rt1.length() + rt2.length();
-
-            // swap segements
-            std::swap(rt1.address_list[i_1], rt2.address_list[j_1]);
-            std::swap(rt1.address_list[i_2], rt2.address_list[j_2]);
-
-            double improvement = initial_length - (rt1.length() + rt2.length());
-
-            // swap back segements
-            std::swap(rt1.address_list[i_1], rt2.address_list[j_1]);
-            std::swap(rt1.address_list[i_2], rt2.address_list[j_2]);
-
-            return improvement;
-        }
-
-        // Given the two segements in two routes, perform the action that maxmizes improvement
-        // Checks all possible directions of tours
-        // returns bool, True if swapping causes improvement, False if no swaps.
-        bool do_best_swap(Route &rt2, int i_1, int i_2, int j_1, int j_2){
-            Route rt1 = Route(*this);
-            
-            // Get the improvement for each potential swap direction
-            vector<vector<int>> swaps_to_test = {
-                {i_1,i_2,j_1,j_2}, 
-                //{i_2,i_1,j_1,j_2},
-                //{i_1,i_2,j_2,j_1},
-                //{i_2,i_1,j_2,j_1}
-            };
-            
-            vector<double> improvements;
-
-            for (vector<int> potential_swap: swaps_to_test){
-                int rt1_start = potential_swap[0];
-                int rt1_end = potential_swap[1];
-                int rt2_start = potential_swap[2];
-                int rt2_end = potential_swap[3];
-                double potential_improvement = swap_improvement(rt2, rt1_start,rt1_end,rt2_start,rt2_end);
-                improvements.push_back(potential_improvement);
-            }
-            
-            // perform the best action (maxmial improvement)
-            auto max_improvement = std::max_element(improvements.begin(),improvements.end());
-
-            // don't swap if there's no improvement
-            if (*max_improvement <= 0 ){
-                return false;
-            }
-            int maxIndex = std::distance(improvements.begin(), max_improvement);
-            vector<int> best_swap = swaps_to_test[maxIndex];
-            int rt1_start = best_swap[0];
-            int rt1_end = best_swap[1];
-            int rt2_start = best_swap[2];
-            int rt2_end = best_swap[3];
-
-            std::swap(rt1.address_list[rt1_start], rt2.address_list[rt2_start]);
-            std::swap(rt1.address_list[rt1_end], rt2.address_list[rt2_end]);
-            cout << "swapped between routes \n";
-            return true;
-        }
-
+ 
        // search through all possible routes
         void apply_total_search(){
             std::vector<Address> best_route = address_list; // Store the initial route as the best
@@ -326,9 +256,6 @@ class Route: public AddressList{
 std::vector<Route> multi_path_apply_2_opt(Route &rt1, Route &rt2) {
 
     bool improvement = true;
-    cout << "Now apply 2 opt between 2 routes (multi_path_apply_2_opt)\n";
-    cout << "\tInitial Rt1: " << rt1.as_string() << '\n';
-    cout << "\tInitial Rt2: " << rt2.as_string() << '\n';
 
     // Keep swapping segements until no more improvement is found
     while (improvement) {
@@ -366,16 +293,8 @@ std::vector<Route> multi_path_apply_2_opt(Route &rt1, Route &rt2) {
                 }
                 /////////////////////////////////////////////
                 // try swapping segements - flip both segment
-                cout << "Before \n";
-                cout << "rt1: " << rt1.as_string() << '\n';
-                cout << "rt2: " << rt2.as_string() << '\n';
-
                 std::swap(rt1.address_list[i], rt2.address_list[j+1]);
                 std::swap(rt1.address_list[i+1], rt2.address_list[j]);
-
-                cout << "After \n";
-                cout << "rt1: " << rt1.as_string() << '\n';
-                cout << "rt2: " << rt2.as_string() << '\n';
 
                 // keep the swap and flag improvement if swap decreases length
                 if ((rt1.length() + rt2.length()) < initial_length){
@@ -389,90 +308,9 @@ std::vector<Route> multi_path_apply_2_opt(Route &rt1, Route &rt2) {
                     std::swap(rt1.address_list[i+1], rt2.address_list[j]);
 
                 }
-                // /////////////////////////////////////////////
-                // // try swapping segements - only 1 segment
-                // // swap route 1's segmenet
-                // std::swap(rt1.address_list[i],rt1.address_list[i+1]);
 
-                // // swap between route 1 and route 2
-                // std::swap(rt1.address_list[i], rt2.address_list[j]);
-                // std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-
-                // // keep the swap and flag improvement if swap decreases length
-                // if ((rt1.length() + rt2.length()) < initial_length){
-                //     improvement = true;
-                //     continue;
-                // }
-
-                // // otherwise swap back: just apply the original swap procedures in reverse order
-                // else{
-                //     // swap addresses
-                //     std::swap(rt1.address_list[i], rt2.address_list[j]);
-                //     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-
-                //     // swap route 1's segmenet
-                //     std::swap(rt1.address_list[i],rt1.address_list[i+1]);
-                // }
-
-                // /////////////////////////////////////////////
-                // // try swapping segements - only 1 segment
-                // // swap route 2's segmenet
-                // std::swap(rt2.address_list[j],rt2.address_list[j+1]);
-
-                // // swap between route 1 and route 2
-                // std::swap(rt1.address_list[i], rt2.address_list[j]);
-                // std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-
-                // // keep the swap and flag improvement if swap decreases length
-                // if ((rt1.length() + rt2.length()) < initial_length){
-                //     improvement = true;
-                //     continue;
-                // }
-
-                // // otherwise swap back: just apply the original swap procedures in reverse order
-                // else{
-                //     // swap addresses
-                //     std::swap(rt1.address_list[i], rt2.address_list[j]);
-                //     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-
-                //     // swap route 2's segmenet
-                //     std::swap(rt2.address_list[j],rt2.address_list[j+1]);
-                // }
             }
         }
     }
-    cout << "\tFinal Rt1: " << rt1.as_string() << '\n';
-    cout << "\tFinal Rt2: " << rt2.as_string() << '\n';
     return {rt1, rt2};
 }
-
-
-// 0)
-// AB
-// EF
-
-// 1)
-// BA
-// EF swap(j, j+1)
-
-// 2)
-// EF
-// BA
-// swap(i,j) swap(i+1,j+1)
-
-
-
-// -----------
-
-// 0)
-// AB
-// EF
-
-// 1) - swap one path
-// AB swap(i, i+1)
-// FE
-
-// 1) - swap between addresses
-// FE
-// AB
-// swap(i,j) swap(i+1,j+1)
