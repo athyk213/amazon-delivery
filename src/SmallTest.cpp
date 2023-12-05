@@ -1,43 +1,56 @@
 #include "amazon_delivery.hpp"
+#include <iostream>
+#include <vector>
+#include <cstdlib>  // for rand function
+
+// Function to generate a random address
+Address generate_random_address() {
+    int x = rand() % 10;  // Random x coordinate (adjust range as needed)
+    int y = rand() % 10;  // Random y coordinate (adjust range as needed)
+    return Address(x, y, "");
+}
+
+// Function to generate n random addresses and create a route
+Route generate_random_route(int n) {
+    Route route;
+    for (int i = 0; i < n; ++i) {
+        route.add_address(generate_random_address());
+    }
+    return route;
+}
 
 int main() {
-    // Create addresses and routes
-    Address address1(0, 2, "2023-12-01", false);
-    Address address2(2, 3, "2023-12-02", false);
-    Address address3(3, 2, "2023-12-03", false);
-    Address address4(2, 0, "2023-12-03", false);
-    Address address5(1, 3, "2023-12-03");
-    Address address6(1, 2, "2023-12-03");
-    Address address7(2, 1, "2023-12-03");
-    Address address8(3, 1, "2023-12-03");
+    // Seed the random number generator
+    srand(0);
 
-    Route route1;
-    route1.add_address(address1);
-    route1.add_address(address2);
-    route1.add_address(address3);
-    route1.add_address(address4);
+    int n = 9;  // Adjust the number of random addresses as needed
 
-    Route route2;
-    route2.add_address(address8);
-    route2.add_address(address7);
-    route2.add_address(address6);
-    route2.add_address(address5);
+    // Generate n random addresses and create a route
+    Route rt1 = generate_random_route(n);
 
-    // Display the initial routes and lengths of each
-    std::cout << "Initial Route 1: " << route1.as_string() << std::endl;
-    std::cout << "Initial Route 2: " << route2.as_string() << std::endl;
-    std::cout << "Length of Route 1: " << route1.length() << std::endl;
-    std::cout << "Length of Route 2: " << route2.length() << std::endl;
-    std::cout << "Length of Route 1 + 2: " << (route1.length() + route2.length()) << std::endl;
+    Route rt2 = rt1;
+    std::cout << "Initial Route: " << rt1.as_string() << std::endl;
 
-    std::vector<Route> optimized_routes = multi_path_apply_2_opt(route1, route2);
+    // Display the initial route and length
+    std::cout << "Length of Initial Route: " << rt1.length() << std::endl;
 
-    // Display the optimized routes and lengths of false
-    std::cout << "Optimized Route 1: " << optimized_routes[0].as_string() << std::endl;
-    std::cout << "Optimized Route 2: " << optimized_routes[1].as_string() << std::endl;
-    std::cout << "Length of Route 1: " << optimized_routes[0].length() << std::endl;
-    std::cout << "Length of Route 2: " << optimized_routes[1].length() << std::endl;
-    std::cout << "Length of Route 1 + 2: " << (optimized_routes[0].length() + optimized_routes[1].length()) << std::endl;
+
+    // Apply the 2-opt algorithm and display the route and length
+    rt1.apply_2_opt();
+    std::cout << "Length of 2-opt Optimized Route: " << rt1.length() << std::endl;
+    std::cout << "Length of Copied Route: " << rt2.length() << std::endl;
+
+    rt1 = generate_random_route(n);
+    std::cout << "Initial Route: " << rt1.as_string() << std::endl;
+
+    // Apply the total search algorithm and display the route and length
+    rt1.apply_total_search();
+    std::cout << "Length of Total Search Optimized Route: " << rt1.length() << std::endl;
+
+    // Apply the greedy algorithm and display the route and length
+    Route greedy_optimized_route = rt1.greedy_route();
+    std::cout << "Length of Greedy Optimized Route: " << greedy_optimized_route.length() << std::endl;
+
 
     return 0;
 }
