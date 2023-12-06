@@ -43,7 +43,6 @@ class MultiRoute{
         void show_routes(){
             for (int i = 0; i < num_routes; i++){
                 Route rt = all_routes[i];
-                cout << "Route_" << i << ": " << rt.as_string() << '\n';
             }
         }
 
@@ -62,6 +61,7 @@ class MultiRoute{
             // Write each address to the file
             for (int i = 0; i < num_routes; i++){
                 file << all_routes[i].as_string() << std::endl;
+                cout << "Length of Route: " << all_routes[i].length() << std::endl;
             }
 
             // Close the file
@@ -88,21 +88,17 @@ class MultiRoute{
             // keep optimizing until no more improvement
             double initial_length;
             bool improvement = true;
-            int n = 0;
+            int n = 1;
             while (improvement == true){
                 n++;
-                cout << "n = " << n <<'\n';
                 improvement = false;
                 initial_length = total_length();
 
                 // apply 2 opt individually
-                // TODO: Paralleize this
                 for (int i = 0; i < num_routes ; i++){
                     all_routes[i].apply_2_opt();
                 }
-                
                 // apply 2 opt between all routes
-                // Idea : for all combinations of 2 routes, apply 2-opt for 2 routes
                 for (int i = 0; i < num_routes - 1; i++){
                     for (int j = i+1 ; j < num_routes; j++){
                         Route rt1 = all_routes[i];
@@ -112,14 +108,11 @@ class MultiRoute{
                         all_routes[j] = new_routes[1];
                     }
                 }
-                cout << 'A';
                 // apply 2 opt individually
-                // TODO: Paralleize this
                 for (int i = 0; i < num_routes ; i++){
                     all_routes[i].apply_2_opt();
                 }
                 
-                cout << 'B';
                 // check if there was improvement
                 if (total_length() < initial_length){
                     improvement = true;

@@ -8,7 +8,7 @@ int main(){
 
     // rng seed and distribution
     std::default_random_engine generator(0);
-    std::uniform_real_distribution<double> distribution(-10,10);
+    std::uniform_real_distribution<double> distribution(0,10);
     double randomDouble1, randomDouble2;
 
     // Generate three routes, the first route will be amazon prime
@@ -19,14 +19,14 @@ int main(){
         randomDouble1 = distribution(generator);
         randomDouble2 = distribution(generator);
         if(i < 10){
-            Address rand_address1(randomDouble1,randomDouble2,"dsafa", true);
+            Address rand_address1(randomDouble1,randomDouble2,"2023-12-05", true);
             route1.add_address(rand_address1);
         }else if (i < 20){
-            Address rand_address1(randomDouble1, randomDouble2,"dsafa");
+            Address rand_address1(randomDouble1, randomDouble2,"2023-12-06");
             route2.add_address(rand_address1);
         }
         else {
-            Address rand_address1(randomDouble1, randomDouble2,"dsafa");
+            Address rand_address1(randomDouble1, randomDouble2,"2023-12-07");
             route3.add_address(rand_address1);
         }
     }

@@ -11,13 +11,13 @@ double TOL = 1e-10;
 
 class Address {
 private:
-    int i, j;
+    double i, j;
     std::string Last_possible_delivery_date;
     bool prime_member;
 public:
     // Constructor
-    Address(int i, int j, std::string Last_possible_delivery_date = "No_Date" , bool prime_member = false) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) , prime_member(prime_member) {}
-    Address(){}; // why do we need this?
+    Address(double i, double j, std::string Last_possible_delivery_date = "No_Date" , bool prime_member = false) : i(i), j(j), Last_possible_delivery_date(Last_possible_delivery_date) , prime_member(prime_member) {}
+    Address(){};
     double get_i() const {
         return i;
     }
@@ -152,7 +152,6 @@ class Route: public AddressList{
             while (address_list.size() > 1) {
 
                 // remove current_address from address_list
-                // TODO find a cleaner way to do this
                 for (int i = 0; i < address_list.size(); i++){
                     if (address_list[i] == current_address){
                         address_list.erase(address_list.begin()+i);
@@ -192,7 +191,6 @@ class Route: public AddressList{
                 }
             }
         }
- 
        // search through all possible routes
         void apply_total_search(){
             std::vector<Address> best_route = address_list; // Store the initial route as the best
@@ -217,7 +215,7 @@ class Route: public AddressList{
             address_list = best_route;
         }
 
-        void save_routes(string file_name, Route &rt2) {
+        void save_route(string file_name) {
             // Open the file for writing
             std::ofstream file(file_name);
 
@@ -227,12 +225,8 @@ class Route: public AddressList{
                 return;
             }
 
-            // Write each address to the file
+            // Write each address of the route to the file
             for (const auto& addr : address_list) {
-                file << addr.as_string() << std::endl;
-            }
-
-            for (const auto& addr : rt2.address_list) {
                 file << addr.as_string() << std::endl;
             }
 
@@ -256,59 +250,46 @@ class Route: public AddressList{
 std::vector<Route> multi_path_apply_2_opt(Route &rt1, Route &rt2) {
 
     bool improvement = true;
-
     // Keep swapping segements until no more improvement is found
     while (improvement) {
         improvement = false;
-
         // select any two segements both routes
         for (size_t i = 1; i < rt1.address_list.size() - 2; ++i) {
             for (size_t j = 1; j < rt2.address_list.size() - 2; ++j){
-
                 // Don't swap if any of the addresses are amazon prime (have to stay on the same route)
                 if (rt1.address_list[i].is_prime_member() or
                     rt1.address_list[i+1].is_prime_member() or
                     rt2.address_list[j].is_prime_member() or
-                    rt2.address_list[j+1].is_prime_member()){
+                    rt2.address_list[j+1].is_prime_member()) {
                         continue;
                 }
-
                 double initial_length = rt1.length() + rt2.length();
-
-                /////////////////////////////////////////////
                 // try swapping segements - flip neither segment
                 std::swap(rt1.address_list[i], rt2.address_list[j]);
                 std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
-
                 // keep the swap and flag improvement if swap decreases length
                 if ((rt1.length() + rt2.length()) < initial_length){
                     improvement = true;
                     continue;
                 }
-
                 // otherwise swap back 
                 else{
                     std::swap(rt1.address_list[i], rt2.address_list[j]);
                     std::swap(rt1.address_list[i+1], rt2.address_list[j+1]);
                 }
-                /////////////////////////////////////////////
                 // try swapping segements - flip both segment
                 std::swap(rt1.address_list[i], rt2.address_list[j+1]);
                 std::swap(rt1.address_list[i+1], rt2.address_list[j]);
-
                 // keep the swap and flag improvement if swap decreases length
                 if ((rt1.length() + rt2.length()) < initial_length){
                     improvement = true;
                     continue;
                 }
-
                 // otherwise swap back
                 else{
                     std::swap(rt1.address_list[i], rt2.address_list[j+1]);
                     std::swap(rt1.address_list[i+1], rt2.address_list[j]);
-
                 }
-
             }
         }
     }
